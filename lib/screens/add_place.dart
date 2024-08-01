@@ -1,14 +1,32 @@
+import 'package:favorite_places_app/widgets/image_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io';
 
-class AddPlaceScreen extends StatefulWidget {
+import '../providers/user_places.dart';
+
+class AddPlaceScreen extends ConsumerStatefulWidget {
   const AddPlaceScreen({super.key});
 
   @override
-  State<AddPlaceScreen> createState() => _AddPlaceScreenState();
+  ConsumerState<AddPlaceScreen> createState() => _AddPlaceScreenState();
 }
 
-class _AddPlaceScreenState extends State<AddPlaceScreen> {
+class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
+  File? _selectedImage;
+
+  void _savePlace() {
+    final _enteredTitle = _titleController.text;
+    if (_enteredTitle.isEmpty || _selectedImage == null) {
+      return;
+    }
+
+    ref
+        .read(userPlacesProvider.notifier)
+        .addPlace(_enteredTitle, _selectedImage!);
+    Navigator.of(context).pop();
+  }
 
   @override
   void dispose() {
@@ -32,11 +50,20 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
               style: const TextStyle(color: Colors.white),
             ),
             const SizedBox(
+              height: 10,
+            ),
+            ImageInput(
+              onPickImage: (image) {
+                _selectedImage = image;
+              },
+            ),
+            const SizedBox(
               height: 16,
             ),
             ElevatedButton.icon(
-                onPressed: () {},
-                label: const Text('Add place'), icon: const Icon(Icons.add))
+                onPressed: _savePlace,
+                label: const Text('Add place'),
+                icon: const Icon(Icons.add))
           ],
         ),
       ),
