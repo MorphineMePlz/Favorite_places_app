@@ -28,15 +28,22 @@ class PlacesList extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => PlaceDetails(place: places[index])));
               },
-          leading: CircleAvatar(
-            radius: 26,
-            backgroundImage: FileImage(places[index].image),
-          ),
+              leading: CircleAvatar(
+                radius: 26,
+                backgroundImage: FileImage(places[index].image),
+              ),
               title: Text(
                 places[index].title,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
+                    .copyWith(color: Colors.white),
+              ),
+              subtitle: Text(
+                places[index].location.address,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
                     .copyWith(color: Colors.white),
               ),
             ));
